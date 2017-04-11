@@ -34,6 +34,22 @@ class CurrentUser {
     func getReadPostIDs(completion: @escaping ([String]) -> Void) {
         var postArray: [String] = []
         // TODO
+        let userReference = dbRef.child("Users").child(id).child("readPosts")
+        userReference.observeSingleEvent(of: .value, with: {(snapshot) in
+            if (snapshot.exists()) {
+                let dict: [String: AnyObject]
+                dict = snapshot.value as! [String : AnyObject]
+                for (_, y) in dict{
+                    postArray.append(y as! String)
+                }
+                completion(postArray)
+
+            } else {
+                //no read posts exist
+                return
+            }
+        })
+        
     }
     
     /*

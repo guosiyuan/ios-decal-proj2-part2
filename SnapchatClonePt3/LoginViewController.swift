@@ -46,16 +46,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if error == nil {
                 
                 //Print into the console if successfully logged in
-                print("You have successfully logged in")
+                //print("You have successfully logged in")
                 
                 //Go to the HomeViewController if the login is sucessful
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "Home")
-                self.present(vc!, animated: true, completion: nil)
-                
+                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "Home")
+                //self.present(vc!, animated: true, completion: nil)
+                self.performSegue(withIdentifier: "loginToMain", sender: nil)
             } else {
                 
                 //Tells the user that there is an error and then gets firebase to tell them the error
-                let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
+                let alertController = UIAlertController(title: "Error", message: "Sign in failed, try again", preferredStyle: .alert)
                 
                 let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
                 alertController.addAction(defaultAction)

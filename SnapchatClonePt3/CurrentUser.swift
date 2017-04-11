@@ -45,6 +45,8 @@ class CurrentUser {
     */
     func addNewReadPost(postID: String) {
         // TODO
+        let userReference = dbRef.child("Users").child(id).child("readPosts")
+        userReference.childByAutoId().setValue(postID)
     }
     
 }

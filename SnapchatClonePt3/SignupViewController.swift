@@ -38,7 +38,36 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         guard let email = emailField.text else { return }
         guard let password = passwordField.text else { return }
         guard let name = nameField.text else { return }
-        
+        if email == "" {
+            let alertController = UIAlertController(title: "Error", message: "Please enter your email and password", preferredStyle: .alert)
+            
+            let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alertController.addAction(defaultAction)
+            
+            present(alertController, animated: true, completion: nil)
+            
+        } else {
+            FIRAuth.auth()?.createUser(withEmail: email, password: password) { (user, error) in
+                
+                if error == nil {
+                    //sign up success
+                    //print("You have successfully signed up")
+                    //Goes to the Setup page which lets the user take a photo for their profile picture and also chose a username
+                    user?.profileChangeRequest().displayName = name
+                    //let vc = self.storyboard?.instantiateViewController(withIdentifier: "Home")
+                    //self.present(vc!, animated: true, completion: nil)
+                    self.performSegue(withIdentifier: "signupToMain", sender: nil)
+                } else {
+                    //an error occurs when signing up
+                    let alertController = UIAlertController(title: "Error", message: "Use proper words to sign up!", preferredStyle: .alert)
+                    
+                    let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                    alertController.addAction(defaultAction)
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
         // YOUR CODE HERE
     }
 

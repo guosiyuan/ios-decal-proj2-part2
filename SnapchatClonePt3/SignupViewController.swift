@@ -53,6 +53,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                     //sign up success
                     //print("You have successfully signed up")
                     //Goes to the Setup page which lets the user take a photo for their profile picture and also chose a username
+                    
                     user?.profileChangeRequest().displayName = name
                     //let vc = self.storyboard?.instantiateViewController(withIdentifier: "Home")
                     //self.present(vc!, animated: true, completion: nil)

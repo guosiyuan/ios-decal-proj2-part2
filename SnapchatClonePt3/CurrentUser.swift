@@ -35,9 +35,14 @@ class CurrentUser {
         var postArray: [String] = []
         // TODO
         let userReference = dbRef.child("Users").child(id).child("readPosts")
-        userReference.observeSingleEvent(of: .value, with: {(snapshot) in
+        userReference.observeSingleEvent(of: .value, with: {snapshot in
             if (snapshot.exists()) {
-                let dict: [String: AnyObject]
+                debugPrint("user snapshot exists")
+                var dict: [String: AnyObject]
+                if (snapshot.value == nil){
+                    return
+                }
+                debugPrint("user snapshot value exists")
                 dict = snapshot.value as! [String : AnyObject]
                 for (_, y) in dict{
                     postArray.append(y as! String)
@@ -46,6 +51,8 @@ class CurrentUser {
 
             } else {
                 //no read posts exist
+                debugPrint("No user snapshot value exists")
+                completion([])
                 return
             }
         })

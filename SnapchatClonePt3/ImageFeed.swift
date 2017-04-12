@@ -79,7 +79,7 @@ func addPost(postImage: UIImage, thread: String, username: String) {
  
 */
 func store(data: Data, toPath path: String) {
-    let storageRef = FIRStorage.storage().reference()
+    let storageRef = FIRStorage.storage().reference(withPath: path)
     storageRef.put(data, metadata: nil, completion: { mata, err in
         if (err != nil) {
             print("error occur")
@@ -87,6 +87,7 @@ func store(data: Data, toPath path: String) {
         }
     
     })
+    
     // YOUR CODE HERE done
 }
 
@@ -113,29 +114,35 @@ func getPosts(user: CurrentUser, completion: @escaping ([Post]?) -> Void) {
     var postArray: [Post] = []
     let userReference = dbRef.child("Posts")
     
-    userReference.observeSingleEvent(of: .value, with: {(snapshot) in
+    userReference.observeSingleEvent(of: .value, with: {snapshot in
         if (snapshot.exists()){
+            debugPrint("snapshot exists")
             let values1 = snapshot.value
             if (values1 == nil) {
                 completion(nil)
-                return
+                //return
             }
+            debugPrint("snapshot values exists")
             let values = values1 as! [String:AnyObject]
-            user.getReadPostIDs(completion: {(strlist) in
+            //debugPrint(values)
+            user.getReadPostIDs(completion: {strlist in
+                debugPrint("get read post values exists")
                 for (k,v) in values{
+                    
                     let hasread = strlist.contains(k)
                     let v = v as! [String:String]
                     let newpost = Post(id: k,username: v["username"]!,postImagePath: v["imagePath"]!, thread: v["thread"]!,dateString: v["date"]!,read: hasread)
                     postArray.append(newpost)
                     
                 }
-            
+                debugPrint("finish getting posts")
+                completion(postArray)
             })
-            completion(postArray)
-            return
+            
+            //return
         } else {
             completion(nil)
-            return
+            //return
         }
     
     })

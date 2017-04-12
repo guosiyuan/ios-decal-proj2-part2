@@ -56,6 +56,7 @@ func clearThreads() {
 
 */
 func addPost(postImage: UIImage, thread: String, username: String) {
+    //print("got cp1")
     let dbRef = FIRDatabase.database().reference()
     let data = UIImageJPEGRepresentation(postImage, 1.0)! 
     let path = "\(firStorageImagesPath)/\(UUID().uuidString)"
@@ -79,9 +80,10 @@ func addPost(postImage: UIImage, thread: String, username: String) {
 */
 func store(data: Data, toPath path: String) {
     let storageRef = FIRStorage.storage().reference()
-    storageRef.put(data, metadata: nil, completion: {(mata, err) in
+    storageRef.put(data, metadata: nil, completion: { mata, err in
         if (err != nil) {
-        print(err.debugDescription)
+            print("error occur")
+            return
         }
     
     })

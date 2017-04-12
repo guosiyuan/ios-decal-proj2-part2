@@ -109,7 +109,36 @@ func store(data: Data, toPath path: String) {
 func getPosts(user: CurrentUser, completion: @escaping ([Post]?) -> Void) {
     let dbRef = FIRDatabase.database().reference()
     var postArray: [Post] = []
+    let userReference = dbRef.child("Posts")
     
+    userReference.observeSingleEvent(of: .value, with: {(snapshot) in
+        if (snapshot.exists()){
+            let values1 = snapshot.value
+            if (values1 == nil) {
+                completion(nil)
+                return
+            }
+            let values = values1 as! [String:AnyObject]
+            user.getReadPostIDs(completion: {(strlist) in
+                for (k,v) in values{
+                    let hasread = strlist.contains(k)
+                    let v = v as! [String:String]
+                    let newpost = Post(id: k,username: v["username"]!,postImagePath: v["imagePath"]!, thread: v["thread"]!,dateString: v["date"]!,read: hasread)
+                    postArray.append(newpost)
+                    
+                }
+            
+            })
+            completion(postArray)
+            return
+        } else {
+            completion(nil)
+            return
+        }
+    
+    })
+    //completion(postArray)
+
     // YOUR CODE HERE
 }
 

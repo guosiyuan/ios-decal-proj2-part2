@@ -59,8 +59,14 @@ func addPost(postImage: UIImage, thread: String, username: String) {
     let dbRef = FIRDatabase.database().reference()
     let data = UIImageJPEGRepresentation(postImage, 1.0)! 
     let path = "\(firStorageImagesPath)/\(UUID().uuidString)"
-    
-    // YOUR CODE HERE
+    let df = DateFormatter()
+    df.dateFormat = dateFormat
+    let date = df.string(from: Date())
+    let values = ["imagePath": path, "thread": thread, "username": username, "date": date]
+    let userReference = dbRef.child("Posts")
+    userReference.childByAutoId().setValue(values)
+    store(data: data, toPath: path)
+    // YOUR CODE HERE done
 }
 
 /*

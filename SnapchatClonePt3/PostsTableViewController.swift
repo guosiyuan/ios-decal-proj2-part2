@@ -59,7 +59,7 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     /*
-        TODO:
+        TODO: done
         Use the 'getPosts' function to retrieve all of the posts in the database. You'll need to pass in the currentUser property declared above so that we know if the posts have been read or not.
         Using the posts variable that is returned, do the following:
         - First clear the current dictionary of posts (in case we're reloading this feed again). You can do this by calling the 'clearThreads' function.
@@ -72,6 +72,20 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
     */
     func updateData() {
         // YOUR CODE HERE
+        getPosts(user: currentUser, completion: {(posts) in
+            clearThreads()
+            for post in posts!{
+                addPostToThread(post: post)
+                getDataFromPath(path: post.postImagePath, completion: {(dat) in
+                    let img = UIImage(data: dat!)
+                    self.loadedImagesById[post.postId] = img
+                
+                })
+                
+            }
+        })
+        postTableView.reloadData()
+        
     }
     
     // MARK: Custom methods (relating to UI)

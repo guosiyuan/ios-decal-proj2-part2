@@ -79,8 +79,13 @@ func addPost(postImage: UIImage, thread: String, username: String) {
 */
 func store(data: Data, toPath path: String) {
     let storageRef = FIRStorage.storage().reference()
+    storageRef.put(data, metadata: nil, completion: {(mata, err) in
+        if (err != nil) {
+        print(err.debugDescription)
+        }
     
-    // YOUR CODE HERE
+    })
+    // YOUR CODE HERE done
 }
 
 

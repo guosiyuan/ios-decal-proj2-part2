@@ -130,12 +130,15 @@ func getPosts(user: CurrentUser, completion: @escaping ([Post]?) -> Void) {
                 for (k,v) in values{
                     
                     let hasread = strlist.contains(k)
+                    debugPrint("If has read the post? \(hasread)")
                     let v = v as! [String:String]
                     let newpost = Post(id: k,username: v["username"]!,postImagePath: v["imagePath"]!, thread: v["thread"]!,dateString: v["date"]!,read: hasread)
+                    debugPrint("whose the writer of the post? \(v["username"])")
                     postArray.append(newpost)
                     
                 }
-                debugPrint("finish getting posts")
+                debugPrint("finish getting posts1")
+                debugPrint(postArray)
                 completion(postArray)
             })
             

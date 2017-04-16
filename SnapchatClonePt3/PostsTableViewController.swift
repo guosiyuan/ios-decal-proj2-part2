@@ -36,6 +36,7 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
     }()
     
     override func viewDidLoad() {
+        self.updateData()
         super.viewDidLoad()
         
         postTableView.delegate = self
@@ -74,11 +75,14 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
     func updateData() {
         // YOUR CODE HERE done
         getPosts(user: currentUser, completion: {posts in
-            debugPrint("finish getting posts")
+            debugPrint("finish getting posts2")
             clearThreads()
             for post in posts!{
-                debugPrint(post.postId)
+                //getDataFromPath(path: <#T##String#>, completion: <#T##(Data?) -> Void#>)
+                //debugPrint(post.postId)
                 addPostToThread(post: post)
+                debugPrint("posted a new thing to thread")
+                //get the real img from the path and store it in the array
                 getDataFromPath(path: post.postImagePath, completion: {dat in
                     debugPrint("getting data from path")
                     if (dat != nil){
@@ -86,6 +90,7 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
                     self.loadedImagesById[post.postId] = img
                     }
                 })
+                debugPrint("finish getting data from path")
                 
             }
             debugPrint("should show every posts in this point")
@@ -161,13 +166,24 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
     // TODO: add the selected post as one of the current user's read posts
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let post = getPostFromIndexPath(indexPath: indexPath), !post.read {
+            //check if img exist, if not in loaded img array then don't call present img
+            
+            if (self.loadedImagesById[post.postId] == nil){
+                post.read = true
+                
+                // YOUR CODE HERE
+                currentUser.addNewReadPost(postID: post.postId)
+                //tableView.reloadRows(at: [indexPath], with: .automatic)
+                tableView.reloadData()
+            } else {
             presentPostImage(forPost: post)
             post.read = true
             
             // YOUR CODE HERE
             currentUser.addNewReadPost(postID: post.postId)
-            tableView.reloadRows(at: [indexPath], with: .automatic)
-            //tableView.reloadData()
+            //tableView.reloadRows(at: [indexPath], with: .automatic)
+            tableView.reloadData()
+            }
         }
      
     }
